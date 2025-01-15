@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'widgets/google_map_view.dart';
+import 'views/google_map_view.dart';
 
 void main() {
   runApp(const RouteTrackerApp());
@@ -12,6 +12,7 @@ class RouteTrackerApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: GoogleMapView(),
     );
   }
