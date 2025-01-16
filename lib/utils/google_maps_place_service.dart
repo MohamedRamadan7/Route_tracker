@@ -22,13 +22,12 @@ class PlacesService {
     }
   }
 
-  Future<PlaceDetailsModel> getPlaceDetails(
-      {required String placeId, required String sesstionToken}) async {
-    var response = await http.get(Uri.parse(
-        '$baseUrl/details/json?key=$apiKey&place_ids=$placeId&sessiontoken=$sesstionToken'));
-    if (response.statusCode == 200) {
-      var data = jsonDecode(response.body)['results'];
+  Future<PlaceDetailsModel> getPlaceDetails({required String placeId}) async {
+    var response = await http
+        .get(Uri.parse('$baseUrl/details/json?key=$apiKey&place_id=$placeId'));
 
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body)['result'];
       return PlaceDetailsModel.fromJson(data);
     } else {
       throw Exception();

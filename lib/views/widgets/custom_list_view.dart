@@ -27,7 +27,7 @@ class CustomListView extends StatelessWidget {
             trailing: IconButton(
               onPressed: () async {
                 var placeDetails = await mapServices.getPlaceDetails(
-                    sesstionToken: '', placeId: places[index].placeId!);
+                    placeId: places[index].placeId!);
                 onPlaceSelect(placeDetails);
               },
               icon: const Icon(Icons.arrow_circle_right_outlined),

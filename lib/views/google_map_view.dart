@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:uuid/uuid.dart';
 
 import '../model/place_autocomplete_model/place_autocomplete_model.dart';
 import '../utils/google_maps_place_service.dart';
@@ -21,8 +22,10 @@ class _GoogleMapViewState extends State<GoogleMapView> {
   late LocationService locationService;
   late TextEditingController textEditingController;
   late PlacesService placesService;
+  late Uuid uuid;
   @override
   void initState() {
+    uuid = const Uuid();
     placesService = PlacesService();
     textEditingController = TextEditingController();
     initialCameraPosition = const CameraPosition(target: LatLng(0, 0));
@@ -41,6 +44,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
   Set<Marker> markers = {};
   List<PlaceAutocompleteModel> places = [];
   LatLng? desintation;
+  String? sesstionToken;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,11 +77,10 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                       textEditingController.clear();
                       places.clear();
 
-                      // sesstionToken = null;
-                      // setState(() {});
-                      desintation = LatLng(
-                          placeDetailsModel.geometry!.location!.lat!,
-                          placeDetailsModel.geometry!.location!.lng!);
+                      sesstionToken = null;
+                      // desintation = LatLng(
+                      //     placeDetailsModel.geometry!.location!.lat!,
+                      //     placeDetailsModel.geometry!.location!.lng!);
 
                       // var points =
                       //     await mapServices.getRouteData(desintation: desintation);
@@ -125,11 +128,12 @@ class _GoogleMapViewState extends State<GoogleMapView> {
 
   void fetchPredictions() {
     textEditingController.addListener(() async {
+      sesstionToken ??= uuid.v4();
       if (textEditingController.text.isNotEmpty) {
         List<PlaceAutocompleteModel> results =
             await placesService.getPredictions(
-                input: textEditingController.text, sesstionToken: '');
-        print(results[0].placeId!);
+                input: textEditingController.text,
+                sesstionToken: sesstionToken!);
         places.clear();
         places.addAll(results);
         setState(() {});
