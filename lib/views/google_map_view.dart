@@ -40,6 +40,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
 
   Set<Marker> markers = {};
   List<PlaceAutocompleteModel> places = [];
+  LatLng? desintation;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,20 +70,21 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                   ),
                   CustomListView(
                     onPlaceSelect: (placeDetailsModel) async {
-                      // textEditingController.clear();
-                      // places.clear();
+                      textEditingController.clear();
+                      places.clear();
 
                       // sesstionToken = null;
                       // setState(() {});
-                      // desintation = LatLng(
-                      //     placeDetailsModel.geometry!.location!.lat!,
-                      //     placeDetailsModel.geometry!.location!.lng!);
+                      desintation = LatLng(
+                          placeDetailsModel.geometry!.location!.lat!,
+                          placeDetailsModel.geometry!.location!.lng!);
 
                       // var points =
                       //     await mapServices.getRouteData(desintation: desintation);
                       // mapServices.displayRoute(points,
                       //     polyLines: polyLines,
                       //     googleMapController: googleMapController);
+
                       setState(() {});
                     },
                     places: places,
