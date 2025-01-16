@@ -87,7 +87,8 @@ class PlaceDetailsModel {
       reviews: (json['reviews'] as List<dynamic>?)
           ?.map((e) => Review.fromJson(e as Map<String, dynamic>))
           .toList(),
-      types: json['types'] as List<String>?,
+      types:
+          (json['types'] as List<String>?)?.map((e) => e.toString()).toList(),
       url: json['url'] as String?,
       userRatingsTotal: json['user_ratings_total'] as int?,
       utcOffset: json['utc_offset'] as int?,

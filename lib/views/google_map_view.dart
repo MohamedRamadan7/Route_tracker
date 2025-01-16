@@ -86,7 +86,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                       setState(() {});
                     },
                     places: places,
-                    // mapServices: mapServices,
+                    mapServices: placesService,
                   )
                 ],
               ),
