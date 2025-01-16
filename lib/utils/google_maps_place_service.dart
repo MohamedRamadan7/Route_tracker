@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:route_tracker/model/place_details_model/place_details_model.dart';
 
 import '../model/place_autocomplete_model/place_autocomplete_model.dart';
 
@@ -16,6 +17,19 @@ class PlacesService {
       List<PlaceAutocompleteModel> places = [];
       data.forEach((item) => places.add(PlaceAutocompleteModel.fromJson(item)));
       return places;
+    } else {
+      throw Exception();
+    }
+  }
+
+  Future<PlaceDetailsModel> getPlaceDetails(
+      {required String placeId, required String sesstionToken}) async {
+    var response = await http.get(Uri.parse(
+        '$baseUrl/details/json?key=$apiKey&place_ids=$placeId&sessiontoken=$sesstionToken'));
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body)['results'];
+
+      return PlaceDetailsModel.fromJson(data);
     } else {
       throw Exception();
     }

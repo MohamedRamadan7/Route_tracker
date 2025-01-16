@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 
+import '../model/place_autocomplete_model/place_autocomplete_model.dart';
+import '../utils/google_maps_place_service.dart';
 import '../utils/location_service .dart';
+import 'widgets/custom_list_view.dart';
 import 'widgets/custom_text_field.dart';
 
 class GoogleMapView extends StatefulWidget {
@@ -17,15 +20,14 @@ class _GoogleMapViewState extends State<GoogleMapView> {
   late GoogleMapController googleMapController;
   late LocationService locationService;
   late TextEditingController textEditingController;
-
+  late PlacesService placesService;
   @override
   void initState() {
+    placesService = PlacesService();
     textEditingController = TextEditingController();
     initialCameraPosition = const CameraPosition(target: LatLng(0, 0));
     locationService = LocationService();
-    textEditingController.addListener(() {
-      print(textEditingController.text);
-    });
+    fetchPredictions();
     super.initState();
   }
 
@@ -37,6 +39,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
   }
 
   Set<Marker> markers = {};
+  List<PlaceAutocompleteModel> places = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,8 +59,36 @@ class _GoogleMapViewState extends State<GoogleMapView> {
               top: 16,
               left: 16,
               right: 16,
-              child: CustomTextField(
-                textEditingController: textEditingController,
+              child: Column(
+                children: [
+                  CustomTextField(
+                    textEditingController: textEditingController,
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  CustomListView(
+                    onPlaceSelect: (placeDetailsModel) async {
+                      // textEditingController.clear();
+                      // places.clear();
+
+                      // sesstionToken = null;
+                      // setState(() {});
+                      // desintation = LatLng(
+                      //     placeDetailsModel.geometry!.location!.lat!,
+                      //     placeDetailsModel.geometry!.location!.lng!);
+
+                      // var points =
+                      //     await mapServices.getRouteData(desintation: desintation);
+                      // mapServices.displayRoute(points,
+                      //     polyLines: polyLines,
+                      //     googleMapController: googleMapController);
+                      setState(() {});
+                    },
+                    places: places,
+                    // mapServices: mapServices,
+                  )
+                ],
               ),
             ),
           ],
@@ -88,5 +119,22 @@ class _GoogleMapViewState extends State<GoogleMapView> {
     } catch (e) {
       print(e);
     }
+  }
+
+  void fetchPredictions() {
+    textEditingController.addListener(() async {
+      if (textEditingController.text.isNotEmpty) {
+        List<PlaceAutocompleteModel> results =
+            await placesService.getPredictions(
+                input: textEditingController.text, sesstionToken: '');
+        print(results[0].placeId!);
+        places.clear();
+        places.addAll(results);
+        setState(() {});
+      } else {
+        places.clear();
+        setState(() {});
+      }
+    });
   }
 }
