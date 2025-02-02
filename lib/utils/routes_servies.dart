@@ -32,7 +32,11 @@ class RoutesSrevises {
       "languageCode": "en-US",
       "units": "IMPERIAL"
     };
-    var response = await http.post(uri, headers: header, body: body);
+    var response = await http.post(
+      uri,
+      headers: header,
+      body: jsonEncode(body),
+    );
 
     if (response.statusCode == 200) {
       return RoutesModel.fromJson(jsonDecode(response.body));
