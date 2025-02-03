@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:route_tracker/utils/map_service.dart';
 
 import '../../model/place_autocomplete_model/place_autocomplete_model.dart';
 import '../../model/place_details_model/place_details_model.dart';
-import '../../utils/place_service.dart';
 
 class CustomListView extends StatelessWidget {
   const CustomListView({
@@ -14,7 +14,7 @@ class CustomListView extends StatelessWidget {
 
   final List<PlaceAutocompleteModel> places;
   final void Function(PlaceDetailsModel) onPlaceSelect;
-  final PlacesService mapServices;
+  final MapServices mapServices;
   @override
   Widget build(BuildContext context) {
     return Container(
