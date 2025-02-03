@@ -18,7 +18,7 @@ class RoutesSrevises {
       'Content-Type': 'application/json',
       'X-Goog-Api-Key': apiKey,
       'X-Goog-FieldMask':
-          ' routes.duration,routes.distanceMeters,routes.polyline.encodedPolyline'
+          'routes.duration,routes.distanceMeters,routes.polyline.encodedPolyline'
     };
     Map<String, dynamic> body = {
       "origin": origin.toJson(),

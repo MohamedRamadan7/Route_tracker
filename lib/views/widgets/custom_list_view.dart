@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+
 import '../../model/place_autocomplete_model/place_autocomplete_model.dart';
 import '../../model/place_details_model/place_details_model.dart';
-import '../../utils/google_maps_place_service.dart';
+import '../../utils/place_service.dart';
 
 class CustomListView extends StatelessWidget {
   const CustomListView({
