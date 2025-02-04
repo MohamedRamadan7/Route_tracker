@@ -103,6 +103,26 @@ class MapServices {
         northeast: LatLng(northEastLatitude, northEastLongitude));
   }
 
+  void getCurrentLocation(
+      {required GoogleMapController googleMapController,
+      required Set<Marker> markers,
+      required Function onUpdatecurrentLocation}) async {
+    var location = await locationService.getLocation();
+    currentLocation = LatLng(location.latitude!, location.longitude!);
+    Marker currentLocationMarker = Marker(
+      markerId: const MarkerId('my_location'),
+      position: currentLocation!,
+    );
+    CameraPosition myCurrentCameraPoistion = CameraPosition(
+      target: currentLocation!,
+      zoom: 17,
+    );
+    googleMapController
+        .animateCamera(CameraUpdate.newCameraPosition(myCurrentCameraPoistion));
+    markers.add(currentLocationMarker);
+    onUpdatecurrentLocation();
+  }
+
   void updateCurrentLocation(
       {required GoogleMapController googleMapController,
       required Set<Marker> markers,

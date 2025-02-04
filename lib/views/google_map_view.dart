@@ -107,8 +107,23 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                     },
                     places: places,
                     mapServices: mapServices,
-                  )
+                  ),
                 ],
+              ),
+            ),
+            Positioned(
+              bottom: 16,
+              right: 16,
+              child: ElevatedButton(
+                onPressed: () {
+                  mapServices.updateCurrentLocation(
+                      googleMapController: googleMapController,
+                      markers: markers,
+                      onUpdatecurrentLocation: () {
+                        setState(() {});
+                      });
+                },
+                child: Text('Get Direction'),
               ),
             ),
           ],
@@ -120,7 +135,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
   /// Fetches the user's current location and updates the map with a marker
   void updateCurrentLocation() {
     try {
-      mapServices.updateCurrentLocation(
+      mapServices.getCurrentLocation(
           markers: markers,
           googleMapController: googleMapController,
           onUpdatecurrentLocation: () {
