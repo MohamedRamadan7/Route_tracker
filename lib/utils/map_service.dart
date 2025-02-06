@@ -20,6 +20,7 @@ class MapServices {
   RoutesSrevises routesSrevises = RoutesSrevises();
 
   LatLng? currentLocation;
+  PlaceDetailsModel? placeDetailsModel;
   Future<void> getPredictions(
       {required String input,
       required String sesstionToken,
@@ -27,7 +28,6 @@ class MapServices {
     if (input.isNotEmpty) {
       var result = await placesService.getPredictions(
           sesstionToken: sesstionToken, input: input);
-
       places.clear();
       places.addAll(result);
     } else {
@@ -123,13 +123,38 @@ class MapServices {
     onUpdatecurrentLocation();
   }
 
-  void updateCurrentLocation(
+  void getSershLocation(
+      {required GoogleMapController googleMapController,
+      required Set<Marker> markers,
+      required Function onUpdatecurrentLocation}) async {
+    currentLocation = LatLng(placeDetailsModel!.geometry!.location!.lat!,
+        placeDetailsModel!.geometry!.location!.lng!);
+    markers.removeWhere(
+        (marker) => marker.markerId == const MarkerId('my_location'));
+
+    Marker currentLocationMarker = Marker(
+      markerId: const MarkerId('my_location'),
+      position: currentLocation!,
+    );
+    CameraPosition myCurrentCameraPoistion = CameraPosition(
+      target: currentLocation!,
+      zoom: 12,
+    );
+    googleMapController
+        .animateCamera(CameraUpdate.newCameraPosition(myCurrentCameraPoistion));
+    markers.add(currentLocationMarker);
+    onUpdatecurrentLocation();
+  }
+
+  void getDirection(
       {required GoogleMapController googleMapController,
       required Set<Marker> markers,
       required Function onUpdatecurrentLocation}) {
     locationService.getRealTimeLocationData((locationData) {
       currentLocation = LatLng(locationData.latitude!, locationData.longitude!);
 
+      markers.removeWhere(
+          (marker) => marker.markerId == const MarkerId('my_location'));
       Marker currentLocationMarker = Marker(
         markerId: const MarkerId('my_location'),
         position: currentLocation!,
@@ -146,6 +171,7 @@ class MapServices {
   }
 
   Future<PlaceDetailsModel> getPlaceDetails({required String placeId}) async {
-    return await placesService.getPlaceDetails(placeId: placeId);
+    return placeDetailsModel =
+        await placesService.getPlaceDetails(placeId: placeId);
   }
 }

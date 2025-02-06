@@ -59,10 +59,22 @@ class _GoogleMapViewState extends State<GoogleMapView> {
             GoogleMap(
                 polylines: polyLines,
                 markers: markers,
-                zoomControlsEnabled: false,
+                zoomControlsEnabled: true,
                 onMapCreated: (controller) {
                   googleMapController = controller;
                   updateCurrentLocation(); // Fetch and update the current location
+                },
+                onTap: (LatLng tappedPoint) {
+                  markers.removeWhere((marker) =>
+                      marker.markerId == const MarkerId('my_location'));
+                  mapServices.currentLocation = tappedPoint; // تحديث الوجهة
+                  markers.add(
+                    Marker(
+                      markerId: const MarkerId('my_location'),
+                      position: tappedPoint,
+                    ),
+                  );
+                  setState(() {});
                 },
                 initialCameraPosition: initialCameraPosition),
             Positioned(
@@ -84,24 +96,30 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                       textEditingController.clear();
                       places.clear();
                       sesstionToken = null;
-
                       // Set the destination
-                      destnation = LatLng(
-                          placeDetailsModel.geometry!.location!.lat!,
-                          placeDetailsModel.geometry!.location!.lng!);
-                      Marker destnationMarker = Marker(
-                        markerId: MarkerId('destnat_location'),
-                        position: destnation,
-                      );
-                      markers.add(destnationMarker);
+                      // destnation = LatLng(
+                      //     placeDetailsModel.geometry!.location!.lat!,
+                      //     placeDetailsModel.geometry!.location!.lng!);
+                      // Marker destnationMarker = Marker(
+                      //   markerId: MarkerId('destnat_location'),
+                      //   position: destnation,
+                      // );
+                      // markers.add(destnationMarker);
+
+                      mapServices.getSershLocation(
+                          googleMapController: googleMapController,
+                          markers: markers,
+                          onUpdatecurrentLocation: () {
+                            setState(() {});
+                          });
 
                       // Get the route data
-                      var points = await mapServices.getRouteData(
-                          desintation: destnation);
-                      mapServices.displayRoute(
-                          points: points,
-                          polyLines: polyLines,
-                          googleMapController: googleMapController);
+                      // var points = await mapServices.getRouteData(
+                      //     desintation: destnation);
+                      // mapServices.displayRoute(
+                      //     points: points,
+                      //     polyLines: polyLines,
+                      //     googleMapController: googleMapController);
 
                       setState(() {});
                     },
@@ -113,17 +131,18 @@ class _GoogleMapViewState extends State<GoogleMapView> {
             ),
             Positioned(
               bottom: 16,
-              right: 16,
+              left: 16,
               child: ElevatedButton(
                 onPressed: () {
-                  mapServices.updateCurrentLocation(
-                      googleMapController: googleMapController,
-                      markers: markers,
-                      onUpdatecurrentLocation: () {
-                        setState(() {});
-                      });
+                  // mapServices.getDirection(
+                  //     googleMapController: googleMapController,
+                  //     markers: markers,
+                  //     onUpdatecurrentLocation: () {
+                  //       setState(() {});
+                  //     });
+                  updateCurrentLocation();
                 },
-                child: Text('Get Direction'),
+                child: Text('Get Current Location'),
               ),
             ),
           ],
