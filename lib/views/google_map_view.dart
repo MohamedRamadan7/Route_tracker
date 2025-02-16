@@ -97,14 +97,14 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                       places.clear();
                       sesstionToken = null;
                       // Set the destination
-                      // destnation = LatLng(
-                      //     placeDetailsModel.geometry!.location!.lat!,
-                      //     placeDetailsModel.geometry!.location!.lng!);
-                      // Marker destnationMarker = Marker(
-                      //   markerId: MarkerId('destnat_location'),
-                      //   position: destnation,
-                      // );
-                      // markers.add(destnationMarker);
+                      destnation = LatLng(
+                          placeDetailsModel.geometry!.location!.lat!,
+                          placeDetailsModel.geometry!.location!.lng!);
+                      Marker destnationMarker = Marker(
+                        markerId: MarkerId('destnat_location'),
+                        position: destnation,
+                      );
+                      markers.add(destnationMarker);
 
                       mapServices.getSershLocation(
                           googleMapController: googleMapController,
@@ -143,6 +143,30 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                   updateCurrentLocation();
                 },
                 child: Text('Get Current Location'),
+              ),
+            ),
+            Positioned(
+              bottom: 16,
+              right: 16,
+              child: ElevatedButton(
+                onPressed: () async {
+                  // mapServices.getDirection(
+                  //     googleMapController: googleMapController,
+                  //     markers: markers,
+                  //     onUpdatecurrentLocation: () {
+                  //       setState(() {});
+                  //     });
+                  var points =
+                      await mapServices.getRouteData(desintation: destnation);
+                  mapServices.displayRoute(
+                      points: points,
+                      polyLines: polyLines,
+                      googleMapController: googleMapController);
+                  print(points);
+                  setState(() {});
+                  // updateCurrentLocation();
+                },
+                child: Text('Get Route'),
               ),
             ),
           ],

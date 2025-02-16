@@ -22,16 +22,16 @@ class CustomListView extends StatelessWidget {
       child: ListView.separated(
         shrinkWrap: true,
         itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(places[index].description!),
-            leading: const Icon(Icons.pin_drop_outlined),
-            trailing: IconButton(
-              onPressed: () async {
-                var placeDetails = await mapServices.getPlaceDetails(
-                    placeId: places[index].placeId!);
-                onPlaceSelect(placeDetails);
-              },
-              icon: const Icon(Icons.arrow_circle_right_outlined),
+          return InkWell(
+            onTap: () async {
+              var placeDetails = await mapServices.getPlaceDetails(
+                  placeId: places[index].placeId!);
+              onPlaceSelect(placeDetails);
+            },
+            child: ListTile(
+              title: Text(places[index].description!),
+              leading: const Icon(Icons.pin_drop_outlined),
+              trailing: const Icon(Icons.arrow_circle_right_outlined),
             ),
           );
         },

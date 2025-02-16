@@ -13,6 +13,7 @@ import '../model/routes_model/routes_model.dart';
 import 'location_service .dart';
 import 'place_service.dart';
 import 'routes_servies.dart';
+// import 'dart:ui' as ui;
 
 class MapServices {
   PlacesService placesService = PlacesService();
@@ -175,3 +176,14 @@ class MapServices {
         await placesService.getPlaceDetails(placeId: placeId);
   }
 }
+
+// Future<Uint8List> getImageFromRowData(String image, double width) async {
+//   var imageData = await rootBundle.load(image);
+//   var imageCodec = await ui.instantiateImageCodec(
+//       imageData.buffer.asUint8List(),
+//       targetWidth: width.round());
+//   var imageFrameInfo = await imageCodec.getNextFrame();
+//   var imageByteData =
+//       await imageFrameInfo.image.toByteData(format: ui.ImageByteFormat.png);
+//   return imageByteData!.buffer.asUint8List();
+// }
